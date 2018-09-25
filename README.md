@@ -152,3 +152,26 @@ USER_NAME|PLAYGROUND
 
   
 이제야 군바리 이동규를 찾아낼 수 있게 되었다.  
+
+## MySQL
+SQL의 개념을 알게되었으니 이제 MySQL을 써보자  
+우선 MySQL 명령어를 입력할 수 있는 터미널까지는 세팅이 되어 있을 것이다.  
+아래 명령어를 차례로 입력하자
+```
+CREATE DATABASE TUTORIAL;
+SHOW DATABASES;
+```
+
+그럼 방금 만든 TUTORIAL 데이터베이스가 보일 것이다.  
+아래 명령어는 TUTORIAL 데이터베이스를 사용하겠다는 것이다.
+```
+USE TUTORIAL;
+```
+
+곧이어서 다음 명령어를 입력해보자
+```
+SHOW TABLES;
+```
+
+그럼 `Empty set`이 포함된 메세지가 뜰 것이다.  
+당연하겠지만 테이블이 없다는 뜻이다.  
