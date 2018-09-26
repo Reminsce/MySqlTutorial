@@ -175,3 +175,142 @@ SHOW TABLES;
 
 그럼 `Empty set`이 포함된 메세지가 뜰 것이다.  
 당연하겠지만 테이블이 없다는 뜻이다.  
+
+우리는 현재 `TBL_USERS`와 `TBL_USER_PLAYGROUNDS` 두 개의 테이블이 필요하다.  
+두 테이블은 아래와 같은 모양을 하고 있다.
+
+ID|NAME|  
+---|----|  
+20162489|이동규|  
+20161818|전유정|
+20161234|남혜미|
+20169876|김아정|
+20190001|이동규|
+
+USER_NAME|PLAYGROUND
+----|-------------|
+20190001|건대
+20190001|홍대
+20161818|논산
+20161818|딸기밭
+20161234|인천
+20161234|국제공항
+20169876|대구
+20169876|뭐있냐;
+20162489|계룡
+20162489|너무조와
+
+이런 모양의 테이블을 만드는 SQL문은 다음과 같다.
+```
+CREATE TABLE tbl_users (id VARCHAR(8) not null, name VARCHAR(20) not null, PRIMARY KEY (id));
+CREATE TABLE tbl_user_playgrounds (user_id VARCHAR(8) not null, playground TEXT not null, FOREIGN KEY (user_id) REFERENCES tbl_users (id) ON DELETE CASCADE ON UPDATE CASCADE);
+```
+
+우선 TBL_USERS를 만드는
+```
+CREATE TABLE tbl_users (id VARCHAR(8) not null, name VARCHAR(20) not null, PRIMARY KEY (id));
+```
+부터 보자. `CREATE TABLE`은 테이블을 만들겠다는 의미로, `CREATE TABLE tbl_users`는 이름이 tbl_users인 테이블을 만들겠다는 뜻이다. 벌써부터 느낌이 오겠지만 그냥 영어 문장을 쓰는 느낌이 강하다.  
+괄호안의 내용은 tbl_users의 구조가 담겨있다. 각각의 column을 명시하며 각 column은 `,`로 구분된다.  
+```
+id VARCHAR(8) not null
+```
+이는 우리가 컬럼을 만들건데~ 이름은 id, 자료형은 varchar, 그리고 널값은 들어갈 수 없어! 라는 뜻이다.  
+그리고 varchar에는 최대 8글자까지 들어갈거야~ (byte 수가 아니다.)  
+즉 varchar에는 최대 8글자짜리 문자열이 들어갈 수 있는 것이다.
+```
+name VARCHAR(20) not null
+```
+같은 방법으로 해석하자면 이름은 name, 자료형은 20글자 짜리 varchar, 널값은 허용하지 않는 컬럼이 만들어 진것이다.  
+```
+PRIMARY KEY (id)
+```
+마지막 이놈은 이 테이블에서 id가 PRIMARY KEY야! 라는 뜻으로 이해하기 쉽다.  
+하나 주의해야 할 것은 PRIMARY KEY로 지정된 column은 중복될 수 없다. 그래서 학번이나 주민등록번호 같이 중복될 일이 없는 값이 들어갈 column으로 신중히 결정해야한다.  
+
+그 다음 테이블을 보겠다.
+```
+CREATE TABLE tbl_user_playgrounds (user_id VARCHAR(8) not null, playground TEXT not null, FOREIGN KEY (user_id) REFERENCES tbl_users (id) ON DELETE CASCADE ON UPDATE CASCADE);
+```
+
+마찬가지로
+```
+CREATE TABLE tbl_user_playgrounds
+```
+tbl_user_playgrounds라는 이름의 테이블을 만들게! 라는 뜻이고
+
+```
+user_id VARCHAR(8) not null
+```
+이름은 user_id, 자료형은 8글자짜리 varchar, 널 값은 허용하지 않는 컬럼을 만든다.
+
+```
+playground TEXT not null
+```
+여기서 새로운 자료형 `TEXT`를 소개한다. `TEXT`는 크기를 예측하기 어려울 때, 즉 매우 긴 문자열이 들어갈 수도 있는 column에 사용한다. 하지만 용량이 큰 만큼 속도가 매우 느리니 신중히 사용해야한다.  
+
+```
+FOREIGN KEY (user_id) REFERENCES tbl_users (id) ON DELETE CASCADE ON UPDATE CASCADE
+```
+꽤 길다. 하지만 하나씩 보면 별거 아니니 겁먹지 말자.  
+아까 PRIMARY KEY와 같이 FOREIGN KEY로 `user_id`를 지정한다. 그리고 이 `user_id`를 어떤 테이블의 어떤 컬럼과 연결할건지 `REFERENCES`뒤에 명시하는 것이다.  
+즉
+```
+REFERENCES tbl_users (id)
+```
+`tbl_users` 테이블의 `id` column와 연결하겠다! 라는 것이다.
+
+```
+ON DELETE CASCADE ON UPDATE CASCADE
+```
+이건 연결된 `tbl_users`의 `id`가 삭제되거나 값이 바뀌면 같이 바뀐다는 뜻인데 여기선 이해하지 않고 그냥 넘어가도 좋다.  
+
+그럼 
+```
+Query OK, 0 rows affected (0.01 sec)
+```
+이와 같은 메세지가 뜨면서 성공을 알릴 것이다.
+
+```
+show tables;
+```
+명령어를 쳐보자. 우리가 만든 테이블을 확인 할 수 있다.  
+
+이제 우리 유정하우스 멤버를 `tbl_users`에 넣을 것이다.  
+멤버는 `이동규`, `전유정`, `김아정`, `남혜미`로, SQL문은 다음과 같다.
+
+```
+INSERT INTO tbl_users VALUES('20162489', '이동규');
+INSERT INTO tbl_users VALUES('20161818', '전유정');
+INSERT INTO tbl_users VALUES('20161234', '남혜미');
+INSERT INTO tbl_users VALUES('20169876', '김아정');
+commit;
+```
+
+위의 INSERT 문으로 테이블 내에 데이터를 삽입 할 수 있다.  
+```
+INSERT INTO tbl_users
+```
+tbl_users 내에 row를 삽입할거야! 라는 뜻이고  
+`VALUES` 뒤에 row에 대한 값이 명시된다.
+```
+VALUES('20162489', '이동규')
+```
+잘 보자. 뭔가 이상하다. `20162489`가 ID이고, `이동규`가 이름인건 내가 봤을 때는 쉽게 알 수 있지만 MYSQL이 판단하는 근거는 무엇일까? 프로그램 입장에서는 `20162489`가 NAME일 수도 있는거 아닌가?  
+답은 CREATE 문에 있다.
+
+```
+CREATE TABLE tbl_users (id VARCHAR(8) not null, name VARCHAR(20) not null, PRIMARY KEY (id));
+```
+테이블을 만들 때 순서를 잘 보자. id가 맨 먼저, name이 두 번째로 만들어졌다.  
+따라서 값을 넣어줄 때도 id, name 순서로 값을 넣어준다.  
+  
+사실 아래와 같은 문장을 쓰면 그 순서도 명시할 수 있다.
+```
+INSERT INTO tbl_users(name, id) VALUES('김박사', '1111');
+```
+하지만 필자는 컬럼이 많을 때 저 컬럼 순서를 모두 적어주는게 매우 귀찮아서 잘 쓰지 않는다.  
+여기까지가 튜토리얼을 위한 DB 세팅이다.  
+SQL자체가 어려운건 아니지만 그 문장 구조를 단 번에 외우는 것은 쉽지 않다.  
+필요할 때마다 검색이나 본문을 참고하여 반복적으로 하다보면 익숙해질 수 있다.  
+그러니 부디 SQL문을 외우려하지말고 그 구조를 보며 이해하려고 하길 바란다.
