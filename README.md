@@ -155,6 +155,8 @@ USER_NAME|PLAYGROUND
 
 ## MySQL
 SQL의 개념을 알게되었으니 이제 MySQL을 써보자  
+
+### 데이터베이스 만들기
 우선 MySQL 명령어를 입력할 수 있는 터미널까지는 세팅이 되어 있을 것이다.  
 아래 명령어를 차례로 입력하자
 ```
@@ -176,6 +178,7 @@ SHOW TABLES;
 그럼 `Empty set`이 포함된 메세지가 뜰 것이다.  
 당연하겠지만 테이블이 없다는 뜻이다.  
 
+### 테이블 만들기
 우리는 현재 `TBL_USERS`와 `TBL_USER_PLAYGROUNDS` 두 개의 테이블이 필요하다.  
 두 테이블은 아래와 같은 모양을 하고 있다.
 
@@ -210,7 +213,9 @@ CREATE TABLE tbl_user_playgrounds (user_id VARCHAR(8) not null, playground TEXT 
 ```
 CREATE TABLE tbl_users (id VARCHAR(8) not null, name VARCHAR(20) not null, PRIMARY KEY (id));
 ```
-부터 보자. `CREATE TABLE`은 테이블을 만들겠다는 의미로, `CREATE TABLE tbl_users`는 이름이 tbl_users인 테이블을 만들겠다는 뜻이다. 벌써부터 느낌이 오겠지만 그냥 영어 문장을 쓰는 느낌이 강하다.  
+부터 보자.  
+`CREATE TABLE`은 테이블을 만들겠다는 의미로, `CREATE TABLE tbl_users`는 이름이 tbl_users인 테이블을 만들겠다는 뜻이다.  
+벌써부터 느낌이 오겠지만 그냥 영어 문장을 쓰는 느낌이 강하다.  
 괄호안의 내용은 tbl_users의 구조가 담겨있다. 각각의 column을 명시하며 각 column은 `,`로 구분된다.  
 ```
 id VARCHAR(8) not null
@@ -227,7 +232,7 @@ PRIMARY KEY (id)
 ```
 마지막 이놈은 이 테이블에서 id가 PRIMARY KEY야! 라는 뜻으로 이해하기 쉽다.  
 하나 주의해야 할 것은 PRIMARY KEY로 지정된 column은 중복될 수 없다. 그래서 학번이나 주민등록번호 같이 중복될 일이 없는 값이 들어갈 column으로 신중히 결정해야한다.  
-
+  
 그 다음 테이블을 보겠다.
 ```
 CREATE TABLE tbl_user_playgrounds (user_id VARCHAR(8) not null, playground TEXT not null, FOREIGN KEY (user_id) REFERENCES tbl_users (id) ON DELETE CASCADE ON UPDATE CASCADE);
@@ -237,7 +242,7 @@ CREATE TABLE tbl_user_playgrounds (user_id VARCHAR(8) not null, playground TEXT 
 ```
 CREATE TABLE tbl_user_playgrounds
 ```
-tbl_user_playgrounds라는 이름의 테이블을 만들게! 라는 뜻이고
+tbl_user_playgrounds라는 이름의 테이블을 만들게! 라는 뜻이고  
 
 ```
 user_id VARCHAR(8) not null
@@ -276,6 +281,7 @@ show tables;
 ```
 명령어를 쳐보자. 우리가 만든 테이블을 확인 할 수 있다.  
 
+### ROW(데이터) 삽입하기
 이제 우리 유정하우스 멤버를 `tbl_users`에 넣을 것이다.  
 멤버는 `이동규`, `전유정`, `김아정`, `남혜미`로, SQL문은 다음과 같다.
 
